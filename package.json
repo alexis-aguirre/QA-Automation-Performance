@@ -1,0 +1,23 @@
+{
+  "name": "QA-Automation-Performance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "clear && artillery run --output results/report.json performance.yml && artillery report --output results/report.html results/report.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexis-aguirre/QA-Automation-Performance.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexis-aguirre/QA-Automation-Performance/issues"
+  },
+  "homepage": "https://github.com/alexis-aguirre/QA-Automation-Performance#readme",
+  "dependencies": {
+    "artillery": "^1.6.2"
+  }
+}

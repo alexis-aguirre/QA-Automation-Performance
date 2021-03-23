@@ -1,0 +1,56 @@
+config:
+  target: "https://api.todoist.com/rest/v1"
+  phases:
+    - duration: 3
+      arrivalRate: 1
+      name: "Phase 1"
+  defaults:
+    headers: 
+      Content-type: application/json
+      Authorization: Bearer {{ $processEnvironment.TOKEN }} 
+  # processor: "./myProcessor.js"
+
+scenarios:
+  - flow:
+        # Get tasks
+      - get:
+          url: "/tasks"
+        # Create task
+      - post:
+          url: "/tasks"
+          json: 
+            content: "hello"
+          capture:
+            json: "$.id"
+            as: "taskId"
+        # Get task
+      - get:
+          url: "/tasks/{{taskId}}"
+          capture:
+            json: "$.content"
+            as: "taskContent"
+        # Update task
+      - post: 
+          url: "/tasks/{{taskId}}"
+          json:
+            content: "Goodbye"
+          expect:
+            statusCode: 204
+        # Change status to complete
+      - post:
+          url: "/tasks/{{taskId}}/close"
+          expect:
+            statusCode: 204
+        # Reopen a task
+      - post:
+          url: "/tasks/{{taskId}}/reopen"
+          expect:
+            statusCode: 204
+        # Delete a task
+      - delete:
+          url: "/tasks/{{taskId}}"
+          expect:
+            statusCode: 204
+
+
+# For more information: https://artillery.io/docs/script-reference/
