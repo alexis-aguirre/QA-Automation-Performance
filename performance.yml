@@ -5,21 +5,22 @@ config:
       arrivalRate: 1
       name: "Phase 1"
   defaults:
-    headers: 
+    headers:
       Content-type: application/json
-      Authorization: Bearer {{ $processEnvironment.TOKEN }} 
-  # processor: "./myProcessor.js"
+      Authorization: Bearer {{ $processEnvironment.TOKEN }}
+  processor: "./processor.js"
 
 scenarios:
   - flow:
+      - function: "generateLoremIpsum"
         # Get tasks
       - get:
           url: "/tasks"
         # Create task
       - post:
           url: "/tasks"
-          json: 
-            content: "hello"
+          json:
+            content: "{{content}}"
           capture:
             json: "$.id"
             as: "taskId"
@@ -29,11 +30,12 @@ scenarios:
           capture:
             json: "$.content"
             as: "taskContent"
+      - function: "generateLoremIpsum"
         # Update task
-      - post: 
+      - post:
           url: "/tasks/{{taskId}}"
           json:
-            content: "Goodbye"
+            content: "{{content}}"
           expect:
             statusCode: 204
         # Change status to complete
@@ -52,5 +54,3 @@ scenarios:
           expect:
             statusCode: 204
 
-
-# For more information: https://artillery.io/docs/script-reference/
